@@ -19,32 +19,34 @@ imgBox.innerHTML = markup;
 
 imgBox.addEventListener('click', onGalleryItemClick)
 
-function onGalleryItemClick(event) {  
-    event.preventDefault();
 
-    if(!event.target.classList.contains('gallery__image')) {
-        return;
-    }    
-   
+function onGalleryItemClick(event) { 
+    event.preventDefault();                    
+
+        if(!event.target.classList.contains('gallery__image')) {
+            return;
+        } const urlOriginalImg = event.target.dataset.source;             
+        
+ makeInstance(urlOriginalImg);  
+} 
+
+
+function makeInstance(urlBigImg) {
+  
     const instance = basicLightbox.create(
-      `<img src="${event.target.dataset.source}">`
-      ).show();
-                
+      `<img src="${urlBigImg}">`, 
+      {onClose: () => {window.removeEventListener('keydown', onEscKeyPress)},
+      onShow: () => {window.addEventListener('keydown', onEscKeyPress)},
+      })
+
+      instance.show(); 
+    
+    function onEscKeyPress (event) {
+          console.log(event.code)
+          if (event.code === 'Escape') {
+            instance.close()            
+          } 
+        }  
 }
-
-
-
-// const modalWindow = document.querySelector('.basicLightbox--visible');
-
-// window.addEventListener('keydown', onEscKeyPress);  
-
-// function onEscKeyPress (event) {
-//     console.log(event.code)
-//     if (event.code === 'Escape') {
-//     instance.close()
-//     }
-// }
-
-
 
 console.log(galleryItems);
